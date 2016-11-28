@@ -24,7 +24,7 @@ for m=1:mmax
     
     Qx=randperm(datasize);
     Qx=Qx(1:round(0.3*datasize));
-
+    
     % compute entropy the root node
     PQ=hist(data(Qx,3),1:clmax)+1e-6;
     PQ=PQ/sum(PQ);
@@ -34,6 +34,6 @@ for m=1:mmax
     root=branch(Qx,0,magnitudeQ,entropyQ,PQ);
     root=grow(root,data,depthmax,clmax); 
     
-    sroot=sbranch(root.theta,root.tau,root.BL,root.BR,root.PQ);
+    sroot=sbranch(root.par,root.BL,root.BR,root.PQ);
     save(strcat('tree',sprintf('%02d.mat',m)),'sroot');
 end
