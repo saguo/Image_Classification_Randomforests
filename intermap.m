@@ -2,15 +2,6 @@
 clear all
 close
 load('config.mat')
-%number of classes
-clmax
-%number of trees
-mmax
-%number of population per class
-nmax
-%max depth
-depthmax
-
 load('data.mat');
 if(size(data,1)>1000)
     ind=randperm(size(data,1));
@@ -18,8 +9,8 @@ if(size(data,1)>1000)
 end
 thetamin=min(data,[],1);
 thetamax=max(data,[],1);
-xmax=40;
-ymax=40;
+xmax=200;
+ymax=200;
 scale=(thetamax-thetamin)./[xmax ymax 1];
 
 markers=['x','o','.','s','*','d','^','v','>','<'];
@@ -56,19 +47,16 @@ for i=1:xmax
                 if isempty(parent.par)
                     PQ(m,:)=parent.PQ;
                     break;
-                else
-                    direction = split_test(theta, parent.par);
-                    if direction == 1
-                        next_parent=parent.BL;
-                        %display(sprintf('L '));
-                    elseif direction == 2
-                        next_parent=parent.BR;
-                        %display(sprintf('R '));
-                    else
-                        error('fail to perform testing');
-                    end
-                    parent=next_parent;
                 end
+
+                if theta(parent.par(1)) < parent.par(2)
+                    next_parent=parent.BL;
+                    %display(sprintf('L '));
+                else
+                    next_parent=parent.BR;
+                    %display(sprintf('R '));
+                end
+                parent=next_parent;
             end
         end
         Pout=sum(PQ,1)/mmax;

@@ -11,10 +11,9 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
     % entropy   % parent entropy
 
     % initialization
-    th=0.00001;               % threshold for Gain and stopping criteria.
+    th=0;             % threshold for Gain and stopping criteria.
     BestGain=th;
-    d = size(data,2)-1; % first examine the size of data
-    n = size(data,1);
+    d = size(data,2)-1;     % first examine the size of data
     par_ = zeros(1,2);
     QLx_ = zeros(1);
     QRx_ = zeros(1);
@@ -30,20 +29,8 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
         QLx=Qx(data(Qx,new_theta)<new_tau);
         QRx=Qx(data(Qx,new_theta)>=new_tau);
 
-        % compute entropy the left node
-        PQL=hist(data(QLx,3),1:clmax)+1e-6;
-        PQL=PQL/sum(PQL);
-        entropyQL=-1*sum(PQL.*log2(PQL));
-        magnitudeQL=length(QLx);
-
-        % compute entropy the right node
-        PQR=hist(data(QRx,3),1:clmax)+1e-6;
-        PQR=PQR/sum(PQR);
-        entropyQR=-1*sum(PQR.*log2(PQR));
-        magnitudeQR=length(QRx);
-        % compute gain
-        Gain=entropy-(magnitudeQL*entropyQL + magnitudeQR*entropyQR)/n;
-
+        [Gain,PQL,PQR,entropyQL,entropyQR] = gain_entropy(entropy,QLx,QRx,data,clmax);
+        
         if(BestGain<Gain)
             % update Gain and store the new optimizing parameters
             BestGain = Gain;

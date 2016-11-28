@@ -23,7 +23,7 @@ for m=1:mmax
     % 1. sample test set Q
     
     Qx=randperm(datasize);
-    Qx=Qx(1:round(0.3*datasize));
+    Qx=Qx(1:round(datasize*0.7));
     
     % compute entropy the root node
     PQ=hist(data(Qx,3),1:clmax)+1e-6;
