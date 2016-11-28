@@ -49,12 +49,14 @@ for i=1:xmax
                     break;
                 end
 
-                if theta(parent.par(1)) < parent.par(2)
+                if split_test(theta, parent.par)==1
                     next_parent=parent.BL;
                     %display(sprintf('L '));
-                else
+                elseif split_test(theta, parent.par)==2
                     next_parent=parent.BR;
                     %display(sprintf('R '));
+                else
+                    error('fail to predict');
                 end
                 parent=next_parent;
             end
@@ -63,7 +65,7 @@ for i=1:xmax
         %[v index]=max(parent.PQ);
         %img(j,i)=index;
         img(j,i,:)=Pout*colors(1:clmax,:);
-    end    
+    end
 end
 image(img);
 hold on

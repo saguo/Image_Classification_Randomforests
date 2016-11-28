@@ -2,7 +2,7 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
     split_train(data, Qx, entropy, clmax)
 
     % a simple function to perform the random split for decision trees
-    % the all possible split number is too large and here we only randomly 
+    % the all possible split number is too large and here we only randomly
     % split for O(n) times and choose the one with best Gain
 
     % data      % the original labelled data of n*(d+1)
@@ -21,7 +21,7 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
     entropyQR_ = 0;
     PQL_ = zeros(1);
     PQR_ = zeros(1);
-    % O(n) iterations   
+    % O(n) iterations
     for i=1:length(Qx)
         % random splitting parameters
         new_theta = randi(d); % from all the features select one to split
@@ -30,7 +30,7 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
         QRx=Qx(data(Qx,new_theta)>=new_tau);
 
         [Gain,PQL,PQR,entropyQL,entropyQR] = gain_entropy(entropy,QLx,QRx,data,clmax);
-        
+
         if(BestGain<Gain)
             % update Gain and store the new optimizing parameters
             BestGain = Gain;
@@ -42,9 +42,9 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
             entropyQR_ = entropyQR;
             PQL_ = PQL;
             PQR_ = PQR;
-        end 
+        end
     end
-    
+
     if(BestGain==th)
         split_found = 0;
     else

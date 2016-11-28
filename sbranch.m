@@ -1,8 +1,8 @@
-classdef sbranch    
+classdef sbranch
     properties
         par         %exist only split found
         BL          %exist only split found
-        BR          %exist only split found    
+        BR          %exist only split found
         PQ          %should exist only on terminal node
     end
     methods
@@ -12,5 +12,5 @@ classdef sbranch
             obj.BR=BR;
             obj.PQ=PQ;
          end
-    end 
+    end
 end
