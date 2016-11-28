@@ -33,21 +33,26 @@ for i=1:size(data,1)
     for m=1:mmax
         parent=trees(m);
         while 1
-            if theta(parent.theta) < parent.tau
-                next_parent=parent.BL;
-            else
-                next_parent=parent.BR;
-            end
-            if isempty(next_parent)
-                P=P+parent.PQ;
+            if isempty(parent.par)
+                PQ(m,:)=parent.PQ;
                 break;
             else
+                direction = split_test(theta, parent.par);
+                if direction == 1
+                    next_parent=parent.BL;
+                    %display(sprintf('L '));
+                elseif direction == 2
+                    next_parent=parent.BR;
+                    %display(sprintf('R '));
+                else
+                    error('fail to perform testing');
+                end
                 parent=next_parent;
             end
         end
     end
     
-    [v index]=max(P);
+    [v,index]=max(P);
     class(i,1)=index;
     
     plot(theta(1),theta(2), markers(data(i,3)), 'MarkerEdgeColor', colors(class(i),:), 'MarkerSize',10);
