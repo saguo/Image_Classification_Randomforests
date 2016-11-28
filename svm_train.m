@@ -1,8 +1,16 @@
 function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
     svm_train(data, QX, entropy, clmax)
 
-th = 0.001;
-BestGain = th;
+  th = 0.001;
+  BestGain = th;
+
+  QLx_ = 0;
+  QRx_ = 0;
+  par_ = 0;
+  entropyQL_ = 0;
+  entropyQR_ = 0 ;
+  PQL_ = 0;
+  PQR_ = 0;
 
 for i=1:length(QX)
 
@@ -17,8 +25,8 @@ for i=1:length(QX)
     new_Par = fitcsvm(X,label);
     Pred_label = predict(new_Par,X);
 
-    QLX = QX(:,find(Pred_label == 1));
-    QRX = QX(:,find(Pred_label == 0));
+    QLx = QX(:,(Pred_label == 1));
+    QRx = QX(:,(Pred_label == 0));
 
     % compute entropy the left node
     PQL = hist(data(QLx,size(data,2)),1:clmax)+1e-6;
@@ -48,11 +56,11 @@ for i=1:length(QX)
 
 end
 
-% Determine if split found
+% Determine if split is found
 if (BestGain == th)
     split_found = 0;
 else
     split_found = 1;
 end
 
-
+end

@@ -20,7 +20,7 @@ classdef branch
         function parent=grow(parent,data,maxdepth,clmax)
 
             [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = ...
-                split_train(data, parent.Qx, parent.entropy, clmax);
+                svm_train(data, parent.Qx, parent.entropy, clmax);
             % if no split is found, stop at current node. else
             if(split_found==1 && parent.depth<=maxdepth)
                 parent.par = par_;
