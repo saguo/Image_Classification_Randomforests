@@ -34,6 +34,5 @@ for m=1:mmax
     root=branch(Qx,0,magnitudeQ,entropyQ,PQ);
     root=grow(root,data,depthmax,clmax);
 
-    sroot=sbranch(root.par,root.BL,root.BR,root.PQ);
-    save(strcat('tree',sprintf('%02d.mat',m)),'sroot');
+    save(strcat('tree',sprintf('%02d.mat',m)),'root');
 end

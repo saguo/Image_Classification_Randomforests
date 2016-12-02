@@ -34,7 +34,7 @@ trees=[];
 
 for m=1:mmax
     load(strcat('tree',sprintf('%02d.mat',m)));
-    trees=[trees sroot];
+    trees=[trees root];
 end
 
 for i=1:xmax
