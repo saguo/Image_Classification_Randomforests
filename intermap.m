@@ -48,7 +48,7 @@ for i=1:xmax
                     PQ(m,:)=parent.PQ;
                     break;
                 end
-                direction = svm_test(theta, parent.par);
+                direction = split_test_single(theta, parent.par);
                 if direction==1
                     next_parent=parent.BL;
                     %display(sprintf('L '));
