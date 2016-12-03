@@ -10,6 +10,7 @@ end
 datasize=size(data,1);
 
 for m=1:mmax
+    root = trees(m);
     % 1. sample test set Q
     Qx=randperm(datasize);
     Qx=Qx(1:round(datasize*0.7));

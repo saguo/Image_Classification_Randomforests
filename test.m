@@ -9,11 +9,11 @@ for m=1:mmax
 end
 datasize=size(data,1);
 
+PQ_out = zeros(datasize, clmax);
 for m=1:mmax
+    root = trees(m);
     % 1. sample test set Q
     Qx = randperm(datasize);
-    PQ_out = zeros(datasize, clmax);
-    
     PQ_out = test(root,data,Qx,PQ_out);
-    PQ_out = round(PQ_out,4);
 end
+PQ_out = round(PQ_out./mmax,4);
