@@ -11,7 +11,7 @@ function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = .
     % entropy   % parent entropy
 
     % initialization
-    th=0;             % threshold for Gain and stopping criteria.
+    th=0.00001;             % threshold for Gain and stopping criteria.
     BestGain=th;
     d = size(data,2)-1;     % first examine the size of data
     par_ = zeros(1,2);

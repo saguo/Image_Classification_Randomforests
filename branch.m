@@ -33,6 +33,33 @@ classdef branch
                 parent.BR=grow(parent.BR,data,maxdepth,clmax);
             end
         end
+        
+        function parent = ULS(parent, data, clmax)
+            if isempty(parent.par)
+                return;
+            end
+            [QLx, QRx] = split_test(data, parent.Qx, parent.par);
+            [~,PQL,PQR,entropyQL,entropyQR] = gain_entropy(parent.entropy,QLx,QRx,data,clmax);
+            
+            parent.BL.PQ = PQL;
+            parent.BL.Qx = QLx;
+            parent.BL.magnitude = length(QLx);
+            parent.BL.entropy = entropyQL;
+            parent.BL.PQ = PQR;
+            parent.BL.Qx = QRx;
+            parent.BL.magnitude = length(QRx);
+            parent.BL.entropy = entropyQR;
+        end
+        
+        function PQ_out = test(parent, data, Qx_in, PQ_out)
+            if isempty(parent.par)
+                PQ_out(Qx_in,:) = PQ_out(Qx_in,:)+parent.PQ;
+                return;
+            end
+            [QLx, QRx] = split_test(data, Qx_in, parent.par);
+            PQ_out = test(parent.BL, data, QLx, PQ_out);
+            PQ_out = test(parent.BR, data, QRx, PQ_out);
+        end
     end
 end
 
