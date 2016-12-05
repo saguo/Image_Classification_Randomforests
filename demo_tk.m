@@ -72,12 +72,8 @@ tmp0 = histc(pred,1:mmax,2);
 end
 
 %% calculate error
-if flag == 1
-cmp = [cpred data(:,3)]; %1st collumn:predicted class, 2nd collumn; true class
-% error: the ratio of the number of misclassified data to the number of data
-error = sum(cmp(:,1) ~= cmp(:,2)) / size(data,1);
 
-% tmp = [pred data(:,3)]
-end
-
+[~,label] = max(PQ_out,[],2);
+error = sum(label(:,1) ~= data(:,size(data,2))) / size(data,1);
+ 
 
