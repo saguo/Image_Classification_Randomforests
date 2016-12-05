@@ -9,8 +9,8 @@ if(size(data,1)>1000)
 end
 thetamin=min(data,[],1);
 thetamax=max(data,[],1);
-xmax=200;
-ymax=200;
+xmax=50;
+ymax=50;
 scale=(thetamax-thetamin)./[xmax ymax 1];
 
 markers=['x','o','.','s','*','d','^','v','>','<'];
@@ -40,6 +40,7 @@ end
 for i=1:xmax
     for j=1:ymax
         theta=[scale(1)*i+thetamin(1),scale(2)*j+thetamin(1)];
+        fprintf('i = %d, j = %d\n', i, j)
         for m=1:mmax
             parent=trees(m);
             %display(strcat('tree',sprintf('%02d ',m)));
