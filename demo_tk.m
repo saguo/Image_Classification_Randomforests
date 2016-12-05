@@ -1,7 +1,7 @@
 % demo_tk
 % this mfile consists of 4 parts
-%(1) generate train and test data using makespiral.m
-%(2) obtaine trees using rt1.m
+%(1) generate training and test data using makespiral.m
+%(2) obtain trees using rt1.m
 %(3) classify test data using test.m (flag=0) or another one (flag=1) 
 %(4) calculate error
 
@@ -14,7 +14,7 @@ makespiral % save (i) training data in data.mat and (ii)clmax, mmax, nmax, depth
 % depthmax=20;
 % mmax = 10;
 
-% devide data into train and test data
+% divide data into train and test data
 datasize = size(data,1);
 data_tr = data(1:round(0.7*datasize),:); % training data
 data_ts = data(size(data_tr,1)+1:end,:); % test data
@@ -48,22 +48,22 @@ load('data.mat');
 load('config.mat') % clmax, (nmax), (depthmax), mmax
 index = [1:size(data,1)]';
 
-pred = zeros(size(data,1),mmax); %each collumn is predicted classes using each tree
+pred = zeros(size(data,1),mmax); %each column is predicted classes using each tree
 for m = 1:mmax;
    output = cell(clmax,1); %initialization
    % output consists of mmax cells. each cell corresponds to class. each cell
-   % containes the index of data, which are classified into that class.
+   % contains the index of data, which are classified into that class.
    
    load(strcat('tree',sprintf('%02d.mat',m)),'root');
    output = split_test_k(root, data, index, output);
    
-   % make tmp (1st collumn:sorted index, 2nd collumn:predicted class)
-   tmp = [output{1} ones(size(output{1}))]; %1st collumn:index, 2nd collumn:predicted class
+   % make tmp (1st collumn:sorted index, 2nd column:predicted class)
+   tmp = [output{1} ones(size(output{1}))]; %1st column:index, 2nd collumn:predicted class
    for i = 2:clmax
        tmp = [tmp; output{i} i*ones(size(output{i}))];
    end
    [~, I] = sort(tmp(:, 1));
-   stmp = tmp(I, :); %1st collumn:sorted index, 2nd collumn:predicted class
+   stmp = tmp(I, :); %1st column:sorted index, 2nd column:predicted class
    pred(:,m) = stmp(:,2);
 end
 % majority vote
