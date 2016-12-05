@@ -1,15 +1,12 @@
 function [QLx, QRx] = ncm_test(data, Qx, par)
-    test_data = data(Qx,:);
+
+    test_data = data(Qx,1:(size(data,2)-1)); % test_data = [actual_data class]
     
-    Pred_class = 0;
-    label = 0;
-    distance = zeros(size(par,1),1);
-    for n = 1:length(par)
-        distance(n) = mean(dist2(test_data, par(n,1 : size(par,2)-1)));
-    end
-    [minvalue, minidx] = min(distance);
+    distance = dist2(test_data, par(:,1 : size(par,2)-1));
+    
+    [~, minidx] = min(distance,[],2);
     Pred_class = minidx;
-    label = par(Pred_class, size(par,2));
+    label = par(Pred_class, size(par,2));% found label for this assigned class from par
     QLx = Qx(label == 1);
     QRx = Qx(label == 0);
 end
