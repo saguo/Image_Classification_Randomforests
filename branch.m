@@ -53,7 +53,9 @@ classdef branch
         
         function PQ_out = test(parent, data, Qx_in, PQ_out)
             if isempty(parent.par)
-                PQ_out(Qx_in,:) = PQ_out(Qx_in,:)+parent.PQ;
+                for i = 1:length(parent.PQ);
+                    PQ_out(Qx_in,i) = PQ_out(Qx_in,i)+parent.PQ(i);
+                end
                 return;
             end
             [QLx, QRx] = split_test(data, Qx_in, parent.par);
