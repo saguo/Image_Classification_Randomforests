@@ -1,16 +1,29 @@
 function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
     svm_train(data, QX, entropy, clmax)
 
-  th = 0.001;
-  BestGain = th;
+%% SVM Train
+% Combining SVM and Random Forest
+% INPUT : data: whole data  QX: sampled data 
+%         entropy: entropy of parent tree
+%         clmax : number of total classes
+% OUTPUT : par_ : parameters of the best SVM classifier for each node        
+%          QLx_, QRx_ : index of data for left and right child nodes
+%          entropyQL_, entropyQR_ : entropy of left and right child nodes
+%          PQL_, PQR_ : distributions of posterior probabilities for left and right
+%          child nodes
 
-  QLx_ = 0;
-  QRx_ = 0;
-  par_ = 0;
-  entropyQL_ = 0;
-  entropyQR_ = 0 ;
-  PQL_ = 0;
-  PQR_ = 0;
+
+  th = 0.001; % threshold
+  BestGain = th;
+  
+  QLx_ = 0; % left node
+  QRx_ = 0; % right node
+  par_ = 0; % parameter(c_means)
+  entropyQL_ = 0; % left node - entropy
+  entropyQR_ = 0; % right node - entropy
+  PQL_ = 0; % left node - distribution
+  PQR_ = 0; % right node - distribution
+
 
 for i=1:length(QX)
 
@@ -21,7 +34,8 @@ for i=1:length(QX)
     label = ones(magnitude,1);
     rand_idx = randperm(magnitude, round(magnitude * 0.5));
     label(rand_idx) = 0;
-
+    
+    % train svm & predict labels
     new_Par = fitcsvm(X,label);
     Pred_label = predict(new_Par,X);
 
@@ -30,8 +44,8 @@ for i=1:length(QX)
 
     [Gain,PQL,PQR,entropyQL,entropyQR] = gain_entropy(entropy,QLx,QRx,data,clmax);
 
+    % Determine if it is the best gain
     if(BestGain < Gain)
-
       QLx_ = QLx;
       QRx_ = QRx;
       par_ = new_Par;
