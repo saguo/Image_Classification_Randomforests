@@ -47,11 +47,7 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
   distance = zeros(clmax,1);
   for m =1: magnitude
       for n = 1:clmax
-          %if mahalDistance
-          %  distance(n) = mean(mahal(X(m,:)', c_mean(n,:)'));
-          %else
             distance(n) = mean(dist2(X(m,:), c_mean(n,:)));
-          %end
       end
       [minvalue, minidx] = min(distance);
       Pred_class(m) = minidx;
