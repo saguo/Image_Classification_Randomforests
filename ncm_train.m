@@ -6,7 +6,12 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
 % INPUT : data: whole data  QX: sampled data 
 %         entropy: entropy of parent tree
 %         clmax : number of total classes
-
+% OUTPUT : par_ : parameters of the best NCM classifier for each node
+%          (include assigned class & assigned label (1 or 0))
+%          QLx_, QRx_ : index of data for left and right child nodes
+%          entropyQL_, entropyQR_ : entropy of left and right child nodes
+%          PQL_, PQR_ : distributions of posterior probabilities for left and right
+%          child nodes
 
   th = 0.001; % threshold
   BestGain = th;
@@ -72,8 +77,9 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
 
     [Gain,PQL,PQR,entropyQL,entropyQR] = gain_entropy(entropy,QLx,QRx,data,clmax);
 
+    
+    % Determine if it is the best gain
     if(BestGain < Gain)
-
       QLx_ = QLx;
       QRx_ = QRx;
       par_ = new_Par;
