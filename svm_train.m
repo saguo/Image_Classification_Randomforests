@@ -25,19 +25,21 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
   PQR_ = 0; % right node - distribution
 
 
-for i=1:length(QX)
-
+for i=1:10
+    %fprintf('iteration = %d\n',i)
     X = data(QX,1:(size(data,2) - 1));
     magnitude = length(QX);
 
     % randomly assign the labels of data from each class to 0,1
     label = ones(magnitude,1);
-    rand_idx = randperm(magnitude, round(magnitude * 0.5));
-    label(rand_idx) = 0;
+    rand_idx = randperm(clmax, round(clmax * 0.5));
+    label(ismember(data(QX,size(data,2)),rand_idx)) = 0;
     
     % train svm & predict labels
+
     new_Par = fitcsvm(X,label);
     Pred_label = predict(new_Par,X);
+     
 
     QLx = QX(:,(Pred_label == 1));
     QRx = QX(:,(Pred_label == 0));
