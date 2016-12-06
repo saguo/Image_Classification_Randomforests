@@ -1,8 +1,8 @@
-%function data_preparation(n)
+function data_preparation(n)
 
 
 load 'features.mat'
-n =3;
+
 % get first n classes of images
 class_num = 100;
 train_num = 500;
