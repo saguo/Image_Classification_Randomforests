@@ -71,9 +71,6 @@ tmp0 = histc(pred,1:mmax,2);
 [~,cpred] = max(tmp0,[],2); % final predicted class
 end
 
-%% calculate error
 
-[~,label] = max(PQ_out,[],2);
-error = sum(label(:,1) ~= data(:,size(data,2))) / size(data,1);
  
 
