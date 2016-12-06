@@ -17,3 +17,8 @@ for m=1:mmax
     PQ_out = test(root,data,Qx,PQ_out);
 end
 PQ_out = round(PQ_out./mmax,4);
+
+%% calculate error
+
+[~,label] = max(PQ_out,[],2);
+error = sum(label(:,1) ~= data(:,size(data,2))) / size(data,1);
