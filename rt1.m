@@ -25,7 +25,7 @@ for m=1:mmax
     Qx=Qx(1:round(datasize*0.7));
 
     % compute entropy the root node
-    PQ=hist(data(Qx,3),1:clmax)+1e-6;
+    PQ=hist(data(Qx,size(data,2)),1:clmax)+1e-6;
     PQ=PQ/sum(PQ);
     entropyQ=-1*sum(PQ.*log2(PQ));
     magnitudeQ=length(Qx);
