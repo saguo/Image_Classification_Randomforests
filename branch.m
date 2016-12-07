@@ -51,6 +51,25 @@ classdef branch
             parent.BL.entropy = entropyQR;
         end
         
+                function parent = IGT(parent, data, Qx, clmax, maxdepth)
+            if isempty(parent.par)
+                parent = grow(parent,data,maxdepth,clmax);
+                return;
+            end
+            
+            [QLx, QRx] = split_test(data, Qx, parent.par);            
+            parent.BL.Qx = [parent.BL.Qx, QLx];
+            parent.BL.magnitude = length(parent.BL.Qx);
+            parent.BR.Qx = [parent.BR.Qx, QRx];
+            parent.BR.magnitude = length(parent.BR.Qx);            
+            [~, parent.BL.PQ, parent.BR.PQ, parent.BL.entropy, parent.BR.entropy] = ... 
+                gain_entropy(parent.entropy, parent.BL.Qx, parent.BR.Qx, data, clmax);
+            
+            parent.BL = IGT(parent.BL, data, QLx, clmax, maxdepth);
+            parent.BR = IGT(parent.BR, data, QRx, clmax, maxdepth);
+            
+        end
+        
         function PQ_out = test(parent, data, Qx_in, PQ_out)
             if isempty(parent.par)
                 for i = 1:length(parent.PQ);
