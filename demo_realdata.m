@@ -12,7 +12,7 @@ data_preparation(nclass);
 
 
 %% training and test
+%please change the test.m: load 'data_ts.mat' and 'config_ts.mat'  first
 
-rt1 % train
-
+rt1 % train    
 test %test
