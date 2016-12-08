@@ -8,8 +8,9 @@
 %(6) execute Baseline method (use all training data to generate tree)
 %(7) compare error of Incremental with that ofBaseline
 
-%% chose incremental method (ULS, IGT)
-method = 'ULS';
+%% chose incremental method (ULS, ULS_tmp, IGT, RTST)
+clear
+method = 'IGT';
 save method method;
 
 %% (1)generate training and test data
@@ -30,7 +31,7 @@ save('data_ts.mat','data_ts')
 
 % divide training data into initial training data and incremental training data
 % cl_init = 9; %% initial train data contain ind_init classes
-cl_init = round(1.0*clmax); %% initial train data contain cl_init classes
+cl_init = round(0.8*clmax); %% initial train data contain cl_init classes
 ind_init = find(ismember(data(:,end), 1:cl_init)); %index of data,whose class are 1: cl_init
 data_init = data(ind_init,:);
 if cl_init == clmax;
@@ -43,6 +44,7 @@ save('data_init.mat','data_init')
 save('data_inc.mat','data_inc')
 
 %% (2)generate initial trees using initial training data
+% clmax is different from rt1.m, the rest is same.
 clear 
 load data_init
 data = data_init; %initial training data
@@ -105,8 +107,11 @@ for m=1:mmax
             root = ULS_tmp(root, data, Qx, clmax);
         case 'IGT'
             root = IGT(root, data, Qx, clmax, depthmax);
+        case 'RTST'
+            nNode = calcNode(root,1); % the number of nodes in a tree
+            ratio = 0.3; % (ratio*nNode) nodes will be retrained 
+            root = RTST(root, data, Qx, clmax, depthmax, nNode, ratio);
     end
-
     save(strcat('tree',sprintf('%02d.mat',m)),'root');
 end
 
