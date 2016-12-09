@@ -34,7 +34,7 @@ classdef branch
             end
         end
         
-        function parent = ULS(parent, data, clmax)
+        function parent = ULS_tmp(parent, data, clmax)
             if isempty(parent.par)
                 return;
             end
@@ -45,17 +45,16 @@ classdef branch
             parent.BL.Qx = QLx;
             parent.BL.magnitude = length(QLx);
             parent.BL.entropy = entropyQL;
-            parent.BL.PQ = PQR;
-            parent.BL.Qx = QRx;
-            parent.BL.magnitude = length(QRx);
-            parent.BL.entropy = entropyQR;
+            parent.BR.PQ = PQR;
+            parent.BR.Qx = QRx;
+            parent.BR.magnitude = length(QRx);
+            parent.BR.entropy = entropyQR;
         end
         
-        function parent = ULS_tmp(parent, data, Qx, clmax)
+        function parent = ULS(parent, data, Qx, clmax)
             if isempty(parent.par)
                 return;
             end
-            
             [QLx, QRx] = split_test(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
@@ -74,7 +73,6 @@ classdef branch
                 parent = grow(parent,data,maxdepth,clmax);
                 return;
             end
-            
             [QLx, QRx] = split_test(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
@@ -93,16 +91,19 @@ classdef branch
            % ratio is the portion of nodes which will be retrained
            nNode_sub = calcNode(parent,1); % the number of nodes in a subtree
            if nNode_sub <= ratio*nNode
-               if rand(1) <= 1/nNode; %(a)uniform p(n)
+               wnNode = calcwNode(parent,parent.depth,1); %the 'weighted' number of nodes in a subtree
+               if rand(1) <= 1/nNode*wnNode; 
                    ratio = ratio - nNode_sub/nNode;
                    parent = grow(parent,data,maxdepth,clmax);
                    return;
                end
            end
+           
            if isempty(parent.par)
                 parent = grow(parent,data,maxdepth,clmax);
                 return;
-            end
+           end
+            
             [QLx, QRx] = split_test(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
