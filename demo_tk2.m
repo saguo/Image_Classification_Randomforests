@@ -8,9 +8,9 @@
 %(6) execute Baseline method (use all training data to generate tree)
 %(7) compare error of Incremental with that ofBaseline
 
-%% chose incremental method (ULS, ULS_tmp, IGT, RTST)
+%% chose incremental method (ULS, IGT, RTST)
 clear
-method = 'IGT';
+method = 'ULS';
 save method method;
 
 %% (1)generate training and test data
@@ -23,14 +23,18 @@ makespiral % save (i) training data in data.mat and (ii)clmax, mmax, nmax, depth
 % mmax = 10;
 
 % devide data into test and training data
+% a = repmat([1:10]',[1 5]);
+% PQ = randperm(size(a,1));
+% b = a(PQ,:)
+
 datasize = size(data,1);
+data = data(randperm(datasize),:); %random permutation
 data_tr = data(1:round(0.7*datasize),:); % training data
 data_ts = data(size(data_tr,1)+1:end,:); % test data
 save('data_tr.mat','data_tr'); % this training data is not used for incremental learning, but for baseline
 save('data_ts.mat','data_ts')
 
 % divide training data into initial training data and incremental training data
-% cl_init = 9; %% initial train data contain ind_init classes
 cl_init = round(0.8*clmax); %% initial train data contain cl_init classes
 ind_init = find(ismember(data(:,end), 1:cl_init)); %index of data,whose class are 1: cl_init
 data_init = data(ind_init,:);
@@ -102,9 +106,9 @@ for m=1:mmax
     [root.PQ, root.entropy] = entropy(data, root.Qx, clmax);
     switch method
         case 'ULS'
-            root = ULS(root, data, clmax);
+            root = ULS(root, data, Qx, clmax);
         case 'ULS_tmp'
-            root = ULS_tmp(root, data, Qx, clmax);
+            root = ULS_tmp(root, data, clmax);
         case 'IGT'
             root = IGT(root, data, Qx, clmax, depthmax);
         case 'RTST'
@@ -149,7 +153,7 @@ data = data_ts;
 save('data.mat','data'); %overwrite data
 
 %calculate PQ_out; probability distribution of each data 
-test
+test;
 [~,cpred] = max(PQ_out,[],2); % final predicted class
 save cpred_BL cpred %save predected class
 
