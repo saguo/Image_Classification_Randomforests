@@ -63,7 +63,15 @@ If you want to know the wordnet_id of a class
 % class is a number between 1 and 100
 wordnet_id = wordmap(class);
 ```
-  
+
+If want to know the image id of a training data
+
+```matlab
+% idx is the index of the training data
+image_id = trainmap(idx);
+```
+
+
 
 ## 6. Normalize before use
 
