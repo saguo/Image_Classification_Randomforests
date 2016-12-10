@@ -2,12 +2,13 @@ classdef branch
     properties
         Qx
         depth
+        nNode       %size of subtree
         par         %exist only split found
         magnitude
         entropy
         BL          %exist only split found
         BR          %exist only split found
-        PQ          %should exist only on terminal node
+        PQ          %probability distribution
     end
     methods
         function obj=branch(Qx,depth,magnitude,entropy,PQ)
@@ -17,9 +18,9 @@ classdef branch
            obj.entropy=entropy;
            obj.PQ=PQ;
         end
-        function parent=grow(parent,data,maxdepth,clmax)
+        function parent=grow(parent,data,maxdepth,clmax,train_function)
             [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = ...
-                split_train(data, parent.Qx, parent.entropy, clmax);
+                train_function(data, parent.Qx, parent.entropy, clmax);
             
             % if no split is found, stop at current node. else
             if(split_found==1 && parent.depth<=maxdepth)
@@ -29,33 +30,16 @@ classdef branch
 
 %                 display(parent)
 
-                parent.BL=grow(parent.BL,data,maxdepth,clmax);
-                parent.BR=grow(parent.BR,data,maxdepth,clmax);
+                parent.BL=grow(parent.BL,data,maxdepth,clmax,train_function);
+                parent.BR=grow(parent.BR,data,maxdepth,clmax,train_function);
             end
         end
         
-        function parent = ULS_tmp(parent, data, clmax)
+        function [parent, cut_max] = ULS(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
             if isempty(parent.par)
                 return;
             end
-            [QLx, QRx] = split_test(data, parent.Qx, parent.par);
-            [~,PQL,PQR,entropyQL,entropyQR] = gain_entropy(parent.entropy,QLx,QRx,data,clmax);
-            
-            parent.BL.PQ = PQL;
-            parent.BL.Qx = QLx;
-            parent.BL.magnitude = length(QLx);
-            parent.BL.entropy = entropyQL;
-            parent.BR.PQ = PQR;
-            parent.BR.Qx = QRx;
-            parent.BR.magnitude = length(QRx);
-            parent.BR.entropy = entropyQR;
-        end
-        
-        function parent = ULS(parent, data, Qx, clmax)
-            if isempty(parent.par)
-                return;
-            end
-            [QLx, QRx] = split_test(data, Qx, parent.par);            
+            [QLx, QRx] = test_func(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
             parent.BR.Qx = [parent.BR.Qx, QRx];
@@ -63,17 +47,17 @@ classdef branch
             [~, parent.BL.PQ, parent.BR.PQ, parent.BL.entropy, parent.BR.entropy] = ... 
                 gain_entropy(parent.entropy, parent.BL.Qx, parent.BR.Qx, data, clmax);
             
-            parent.BL = ULS_tmp(parent.BL, data, QLx, clmax);
-            parent.BR = ULS_tmp(parent.BR, data, QRx, clmax);
+            [parent.BL, ~] = ULS(parent.BL, data, QLx, clmax, maxdepth, cut_max, train_func, test_func);
+            [parent.BR, ~] = ULS(parent.BR, data, QRx, clmax, maxdepth, cut_max, train_func, test_func);
             
         end
         
-        function parent = IGT(parent, data, Qx, clmax, maxdepth)
+        function [parent, cut_max] = IGT(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
             if isempty(parent.par)
-                parent = grow(parent,data,maxdepth,clmax);
+                parent = grow(parent,data,maxdepth,clmax,train_func);
                 return;
             end
-            [QLx, QRx] = split_test(data, Qx, parent.par);            
+            [QLx, QRx] = test_func(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
             parent.BR.Qx = [parent.BR.Qx, QRx];
@@ -81,30 +65,30 @@ classdef branch
             [~, parent.BL.PQ, parent.BR.PQ, parent.BL.entropy, parent.BR.entropy] = ... 
                 gain_entropy(parent.entropy, parent.BL.Qx, parent.BR.Qx, data, clmax);
             
-            parent.BL = IGT(parent.BL, data, QLx, clmax, maxdepth);
-            parent.BR = IGT(parent.BR, data, QRx, clmax, maxdepth);
+            [parent.BL, ~] = IGT(parent.BL, data, QLx, clmax, maxdepth, cut_max, train_func, test_func);
+            [parent.BR, ~] = IGT(parent.BR, data, QRx, clmax, maxdepth, cut_max, train_func, test_func);
             
         end
         
-        function [parent,ratio] = RTST(parent, data, Qx, clmax, maxdepth,nNode,ratio)
+        function [parent,cut_max] = RTST(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
            % nNode is the number of node in a tree
-           % ratio is the portion of nodes which will be retrained
+           % cut_max is the maximum number of nodes which will be retrained
            nNode_sub = calcNode(parent,1); % the number of nodes in a subtree
-           if nNode_sub <= ratio*nNode
+           if nNode_sub <= cut_max
                wnNode = calcwNode(parent,parent.depth,1); %the 'weighted' number of nodes in a subtree
-               if rand(1) <= 1/nNode*wnNode; 
-                   ratio = ratio - nNode_sub/nNode;
-                   parent = grow(parent,data,maxdepth,clmax);
+               if rand(1) <= 1/parent.nNode*wnNode; 
+                   cut_max = cut_max - nNode_sub;
+                   parent = grow(parent,data,maxdepth,clmax,train_func);
                    return;
                end
            end
            
            if isempty(parent.par)
-                parent = grow(parent,data,maxdepth,clmax);
+                parent = grow(parent,data,maxdepth,clmax,train_func);
                 return;
            end
             
-            [QLx, QRx] = split_test(data, Qx, parent.par);            
+            [QLx, QRx] = test_func(data, Qx, parent.par);            
             parent.BL.Qx = [parent.BL.Qx, QLx];
             parent.BL.magnitude = length(parent.BL.Qx);
             parent.BR.Qx = [parent.BR.Qx, QRx];
@@ -112,21 +96,31 @@ classdef branch
             [~, parent.BL.PQ, parent.BR.PQ, parent.BL.entropy, parent.BR.entropy] = ... 
                 gain_entropy(parent.entropy, parent.BL.Qx, parent.BR.Qx, data, clmax);
             
-            [parent.BL,ratio] = RTST(parent.BL, data, QLx, clmax, maxdepth, nNode,ratio);
-            [parent.BR,ratio] = RTST(parent.BR, data, QRx, clmax, maxdepth,nNode,ratio);           
+            [parent.BL,cut_max] = RTST(parent.BL, data, QLx, clmax, maxdepth, cut_max, train_func, test_func);
+            [parent.BR,cut_max] = RTST(parent.BR, data, QRx, clmax, maxdepth, cut_max, train_func, test_func);           
            
         end
         
-        function PQ_out = test(parent, data, Qx_in, PQ_out)
+        function parent = subtree_size(parent)
+            if isempty(parent.par)
+                parent.nNode = 1;
+                return
+            end            
+            parent.BL = subtree_size(parent.BL);
+            parent.BR = subtree_size(parent.BR);
+            parent.nNode = parent.BL.nNode + parent.BR.nNode;
+        end
+        
+        function PQ_out = prediction(parent, data, Qx_in, PQ_out, test_func)
             if isempty(parent.par)
                 for i = 1:length(parent.PQ);
                     PQ_out(Qx_in,i) = PQ_out(Qx_in,i)+parent.PQ(i);
                 end
                 return;
             end
-            [QLx, QRx] = split_test(data, Qx_in, parent.par);
-            PQ_out = test(parent.BL, data, QLx, PQ_out);
-            PQ_out = test(parent.BR, data, QRx, PQ_out);
+            [QLx, QRx] = test_func(data, Qx_in, parent.par);
+            PQ_out = prediction(parent.BL, data, QLx, PQ_out, test_func);
+            PQ_out = prediction(parent.BR, data, QRx, PQ_out, test_func);
         end
         
     end

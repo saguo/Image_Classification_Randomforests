@@ -25,8 +25,8 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
   PQR_ = 0; % right node - distribution
 
 
-for i=1:2^clmax
-    fprintf('iteration = %d\n',i)
+for i=1:20
+%     fprintf('iteration = %d\n',i)
     X = data(QX,1:(size(data,2) - 1));
     magnitude = length(QX);
 

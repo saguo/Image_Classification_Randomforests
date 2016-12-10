@@ -1,24 +1,17 @@
-% test all datas
-clear all
-load('data.mat')
-load('config.mat')
-trees = [];
-for m=1:mmax
-    load(strcat('tree',sprintf('%02d.mat',m)));
-    trees=[trees root];
+function [pred, error] = test(sroot, data, clmax, test_func)
+%% test in a given forest
+% sroot: root of forest
+% data: test data
+% clmax: number of classes
+% test_func: specific function for testing data in a node
+% pred: prediction of data
+
+data_size = size(data, 1);
+Qx = 1: data_size;
+PQ_out = zeros(data_size, clmax);
+for i = 1: length(sroot)
+    root = sroot{i};
+    PQ_out = prediction(root, data, Qx, PQ_out, test_func);
 end
-datasize=size(data,1);
-
-PQ_out = zeros(datasize, clmax);
-for m=1:mmax
-    root = trees(m);
-    % 1. sample test set Q
-    Qx = randperm(datasize);
-    PQ_out = test(root,data,Qx,PQ_out);
-end
-PQ_out = round(PQ_out./mmax,4);
-
-%% calculate error
-
-[~,label] = max(PQ_out,[],2);
-error = sum(label(:,1) ~= data(:,size(data,2))) / size(data,1);
+[~, pred] = max(PQ_out, [], 2);
+error = sum(data(:, end) ~= pred) / data_size;
