@@ -10,9 +10,9 @@ function sroot = increment(sroot, data, Qx, clmax, depthmax, ratio, incre_func, 
 % train_func: specific function for spliting data in a node
 % test_func: specific function for testing data in a node
 
+func_name = functions(incre_func);
 for i = 1: length(sroot)
     root = sroot{i};
-    func_name = functions(incre_func);
     if strcmp(func_name.function, 'RTST')     
         root = subtree_size(root);
         root = weighted_uniform(root, 1 / root.nNode);
