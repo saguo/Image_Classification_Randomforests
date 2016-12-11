@@ -10,7 +10,13 @@ incre_func = @RTSTQ;
 train_func = @ncm_train;
 test_func = @ncm_test;
 
+realdata = 0;   % spiraldata - 0  realdata - 1
+
+if realdata
+[data_train, data_test] = data_preparation(clmax);  
+else
 [data_train, data_test] = prepare_spiral_data(clmax, nmax, trainmax);
+end
 
 % format training data
 data_init = data_train(1: initsize * trainmax, :);
