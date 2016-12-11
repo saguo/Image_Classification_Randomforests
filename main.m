@@ -13,7 +13,7 @@ test_func = @ncm_test;
 realdata = 0;   % spiraldata - 0  realdata - 1
 
 if realdata
-[data_train, data_test] = data_preparation(clmax);  
+[data_train, data_test] = prepare_real_data(clmax);  
 else
 [data_train, data_test] = prepare_spiral_data(clmax, nmax, trainmax);
 end
