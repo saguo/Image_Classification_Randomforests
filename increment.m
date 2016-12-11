@@ -12,7 +12,14 @@ function sroot = increment(sroot, data, Qx, clmax, depthmax, ratio, incre_func, 
 
 for i = 1: length(sroot)
     root = sroot{i};
-    root = subtree_size(root);
+    func_name = functions(incre_func);
+    if strcmp(func_name.function, 'RTST')     
+        root = subtree_size(root);
+        root = weighted_uniform(root, 1 / root.nNode);
+    elseif strcmp(func_name.function, 'RTSTQ')        
+        [root, quality_sum]  = quality(root, 0);
+        root = normalize_cp(root, quality_sum);
+    end
     root.Qx = [root.Qx, Qx];
     root.magnitude = length(root.Qx);
     [root.PQ, root.entropy] = entropy(data, root.Qx, clmax); % compute the entropy of root

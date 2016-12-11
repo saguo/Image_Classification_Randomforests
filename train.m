@@ -12,8 +12,7 @@ sroot = cell(mmax, 1);
 for i = 1: mmax
     [PQ, entropyQ] = entropy(data, Qx, clmax); % compute the entropy of root
     root = branch(Qx, 0, length(Qx), entropyQ, PQ);
-    root = grow(root, data, depthmax, clmax, train_func);
-    sroot{i} = root; 
+    sroot{i} = grow(root, data, depthmax, clmax, train_func); 
 end
 
 

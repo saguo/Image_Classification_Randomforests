@@ -1,12 +1,12 @@
 clear
 clmax = 10;
 initsize = 5;
-nmax = 300;
+nmax = 100;
 trainmax = 70;
 mmax = 10;
 depthmax = 10;
 ratio = 0.3;
-incre_func = @IGT;
+incre_func = @RTSTQ;
 train_func = @split_train;
 test_func = @split_test;
 
