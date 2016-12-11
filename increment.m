@@ -22,6 +22,8 @@ for i = 1: length(sroot)
     end
     root.Qx = [root.Qx, Qx];
     root.magnitude = length(root.Qx);
-    [root.PQ, root.entropy] = entropy(data, root.Qx, clmax); % compute the entropy of root
+    root.PQ=hist(data(root.Qx,size(data,2)),1:clmax)+1e-6;
+    root.PQ=root.PQ/sum(root.PQ);
+    root.entropy=-1*sum(root.PQ.*log2(root.PQ));% compute the entropy of root
     [sroot{i}, ~] = incre_func(root, data, Qx, clmax, depthmax, ratio * root.nNode, train_func, test_func);
 end
