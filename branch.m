@@ -29,7 +29,7 @@ classdef branch
                 parent.BL=branch(QLx_,parent.depth+1,length(QLx_),entropyQL_,PQL_);
                 parent.BR=branch(QRx_,parent.depth+1,length(QRx_),entropyQR_,PQR_);
 
-%                 display(parent)
+%               display(parent)
 
                 parent.BL=grow(parent.BL,data,maxdepth,clmax,train_function);
                 parent.BR=grow(parent.BR,data,maxdepth,clmax,train_function);
