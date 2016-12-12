@@ -139,6 +139,15 @@ classdef branch
             parent.nNode = parent.BL.nNode + parent.BR.nNode;
         end
         
+        function parent = uniform(parent, uniform_p)
+            parent.cp = uniform_p;
+            if isempty(parent.par)
+                return
+            end
+            parent.BL = uniform(parent.BL, uniform_p);
+            parent.BR = uniform(parent.BR, uniform_p);
+        end
+        
         function parent = weighted_uniform(parent, uniform_p)
             if isempty(parent.par)
                 parent.cp = uniform_p;

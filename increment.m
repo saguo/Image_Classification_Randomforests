@@ -15,7 +15,7 @@ for i = 1: length(sroot)
     root = sroot{i};
     if strcmp(func_name.function, 'RTST')     
         root = subtree_size(root);
-        root = weighted_uniform(root, 1 / root.nNode);
+        root = uniform(root, 1 / root.nNode);
     elseif strcmp(func_name.function, 'RTSTQ')        
         [root, quality_sum]  = quality(root, 0);
         root = normalize_cp(root, quality_sum);
