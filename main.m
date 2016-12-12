@@ -29,5 +29,5 @@ incre_func = @RTSTQ; % incre_fuc: specific function for tree increment: baseline
 train_func = @split_train; % train_func: specific function for spliting data in a node: split_train, ncm_train, svm_train
 test_func = @split_test; % test_func: specific function for testing data in a node: split_test, ncm_test, svm_test
 
-[train_error, test_error, train_time, sroot] = oneclickresult(data_train, data_test, train_num, test_num...
+[train_error, test_error, train_time, test_time, sroot] = oneclickresult(data_train, data_test, train_num, test_num...
     , class_num, init_size, incre_size, forest_size, depthmax, cut_ratio, incre_func, train_func, test_func);
