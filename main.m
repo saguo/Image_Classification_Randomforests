@@ -17,7 +17,7 @@ else
     % so if you define these three variables before, they will be overwritten by mine, just in case 
     % some careless assign invalid values. But it's fine that you redefine "class_num" after loading data.
     load('features/real.mat'); 
-    class_num = 6; % just for short time test
+%     class_num = 6; % just for short time test
 end
 
 init_size = 6; % init_size: class number of initial training data
