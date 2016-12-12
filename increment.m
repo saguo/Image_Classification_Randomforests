@@ -13,8 +13,8 @@ function sroot = increment(sroot, data, Qx, clmax, depthmax, ratio, incre_func, 
 func_name = functions(incre_func);
 for i = 1: length(sroot)
     root = sroot{i};
-    if strcmp(func_name.function, 'RTST')     
-        root = subtree_size(root);
+    root = subtree_size(root);
+    if strcmp(func_name.function, 'RTST')
         root = uniform(root, 1 / root.nNode);
     elseif strcmp(func_name.function, 'RTSTQ')        
         [root, quality_sum]  = quality(root, 0);
