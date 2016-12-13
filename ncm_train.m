@@ -54,7 +54,7 @@ function[QLx_, QRx_, par_, entropyQL_,entropyQR_,PQL_,PQR_, split_found] = ...
       
   end
     
-  for i=1:1024
+  for i=1:20
         
     Pred_label = zeros(magnitude,1);
     
