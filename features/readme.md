@@ -69,7 +69,7 @@ If want to know the image id of a training data
 ```matlab
 % idx is the index of the training data
 image_id = trainmap(idx);
-% idy is the index of the training data
+% idy is the index of the test data
 image_id = testmap(idy);
 ```
 
