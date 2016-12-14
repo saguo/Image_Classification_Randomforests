@@ -69,7 +69,13 @@ If want to know the image id of a training data
 ```matlab
 % idx is the index of the training data
 image_id = trainmap(idx);
+% idy is the index of the training data
+image_id = testmap(idy);
 ```
+
+Get original image from 'http://www.image-net.org/api/text/imagenet.synset.geturls.getmapping?wnid=[wnid]':
+
+For example, if the image id is 'n01968897_19', then replace [wnid] with "n01968897", and search image link on the opened website.
 
 
 
