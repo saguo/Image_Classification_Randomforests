@@ -1,4 +1,4 @@
-function [train_error, test_error, train_time, test_time, sroot] = oneclickresult...
+function [train_error, test_error, train_time, test_time, pred, sroot] = oneclickresult...
     (data_train, data_test, train_num, test_num, class_num, init_size, incre_size...
     , forest_size, depthmax, cut_ratio, incre_func, train_func, test_func)
 %%
@@ -30,7 +30,7 @@ Qx = 1: init_size * train_num;
 [~, train_error] = test(sroot, data_train, Qx, init_size, test_func);
 Qx = 1: init_size * test_num;
 tic
-[~, test_error] = test(sroot, data_test, Qx, init_size, test_func);
+[pred{1}, test_error] = test(sroot, data_test, Qx, init_size, test_func);
 test_time = toc;
 
 % increment and test
@@ -58,7 +58,7 @@ while (init_size+incre_size*(iter-1)) < class_num
     train_error = [train_error, error];
     Qx = 1: cx(2)*test_num;
     tic
-    [~, error] = test(sroot, data_test, Qx, cx(2), test_func);
+    [pred{iter+1}, error] = test(sroot, data_test, Qx, cx(2), test_func);
     test_time = [test_time toc];
     test_error = [test_error, error];
     iter = iter + 1;

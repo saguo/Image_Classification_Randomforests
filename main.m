@@ -1,3 +1,8 @@
+% This is the only file you need.
+% Before asking a question, read comments and documents first.
+% Do not express "bug" by push, no one knows what you are talking about and push is not used for reporting bug.
+% Instead, figure out the steps to reproduce a bug and clearly express the steps in "Issue" page.
+
 clear
 source = 0; % 0 for spiral data, else for real data
 
@@ -15,14 +20,14 @@ else
 %     class_num = 6; % just for short time test
 end
 
-init_size = 5; % init_size: class number of initial training data
-incre_size = 5; % incre_size: class number of each increment
+init_size = 6; % init_size: class number of initial training data
+incre_size = 2; % incre_size: class number of each increment
 forest_size = 10; % forest_size: number of trees
 depthmax = 10; % depthmax: maximum tree depth
 cut_ratio = 0.3; % cut_ratio: only used in RTST and RTSTQ
-incre_func = @RTSTQ; % incre_fuc: specific function for tree increment: baseline, ULS, IGT, RTST, RTSTQ
-train_func = @ncm_train; % train_func: specific function for spliting data in a node: split_train, ncm_train, svm_train
-test_func = @ncm_test; % test_func: specific function for testing data in a node: split_test, ncm_test, svm_test
+incre_func = @IGT; % incre_fuc: specific function for tree increment: baseline, ULS, IGT, RTST, RTSTQ
+train_func = @split_train; % train_func: specific function for spliting data in a node: split_train, ncm_train, svm_train
+test_func = @split_test; % test_func: specific function for testing data in a node: split_test, ncm_test, svm_test
 
-[train_error, test_error, train_time, test_time, sroot] = oneclickresult(data_train, data_test, train_num, test_num...
+[train_error, test_error, train_time, test_time, pred, sroot] = oneclickresult(data_train, data_test, train_num, test_num...
     , class_num, init_size, incre_size, forest_size, depthmax, cut_ratio, incre_func, train_func, test_func);
