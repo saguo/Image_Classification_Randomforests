@@ -1,3 +1,4 @@
+%%%Author Takeshi Kondoh
 function output = split_test_k(branch, data, index, output)
 % output consists of mmax cells. each cell corresponds to class. each cell
 % containes the index of data, which are classified into that class.
