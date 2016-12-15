@@ -1,3 +1,4 @@
+%%%Author Takeshi Kondoh
 % This function calculates the number of nodes in a tree
 % itinital nNode = 1
 function nNode = calcNode(parent,nNode)
