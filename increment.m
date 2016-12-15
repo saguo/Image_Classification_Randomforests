@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 function sroot = increment(sroot, data, Qx, clmax, depthmax, ratio, incre_func, train_func, test_func)
 %% increment a given forest
 % sroot: root of forest

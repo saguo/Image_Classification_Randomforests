@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 function data = makespiral_f(clmax, nmax)
 %% make spiral data
 % clmax: number of classes

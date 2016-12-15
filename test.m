@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 function [pred, error] = test(sroot, data, Qx, clmax, test_func)
 %% test in a given forest
 % sroot: root of forest

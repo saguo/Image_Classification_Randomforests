@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 function sroot = train(data, Qx, clmax, mmax, depthmax, train_func)
 %% initilize a forest
 % data: training data

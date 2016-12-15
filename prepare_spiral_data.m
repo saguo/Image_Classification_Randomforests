@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 function [data_train, data_test] = prepare_spiral_data(clmax, train_num, test_num)
 %%
 % clmax: number of class

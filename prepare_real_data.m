@@ -1,3 +1,4 @@
+%%% Author: Zhaoming Zhang
 load('features/features.mat');
 
 data_train = [train_x; train_y]';

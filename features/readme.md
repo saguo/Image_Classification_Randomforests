@@ -1,3 +1,5 @@
+**Author: Zhaoming Zhang**
+
 This is an image classification dataset used for EECS545 final project which belongs to group 10.
 
   

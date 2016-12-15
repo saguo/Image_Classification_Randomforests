@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng, Zhaoming Zhang, Takeshi Kondoh
 classdef branch
     properties
         Qx
@@ -19,6 +20,8 @@ classdef branch
            obj.entropy=entropy;
            obj.PQ=PQ;
         end
+        
+        %%% Author: Ruobai Feng
         function parent=grow(parent,data,maxdepth,clmax,train_function)
             [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = ...
                 train_function(data, parent.Qx, parent.entropy, clmax);
@@ -36,6 +39,7 @@ classdef branch
             end
         end
         
+        %%% Author: Ruobai Feng, Zhaoming Zhang
         function [parent, cut_max] = ULS(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
             if isempty(parent.par)
                 return;
@@ -53,6 +57,7 @@ classdef branch
             
         end
         
+        %%% Author: Zhaoming Zhang, Takeshi Kondoh
         function [parent, cut_max] = IGT(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
             if isempty(parent.par)
                 parent = grow(parent,data,maxdepth,clmax,train_func);
@@ -71,6 +76,7 @@ classdef branch
             
         end
         
+        %%% Author: Takeshi Kondoh
         function [parent,cut_max] = RTST(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
            % nNode is the number of node in a tree
            % cut_max is the maximum number of nodes which will be retrained
@@ -100,6 +106,7 @@ classdef branch
            
         end
         
+        %%% Author: Zhaoming Zhang
         function [parent,cut_max] = RTSTQ(parent, data, Qx, clmax, maxdepth, cut_max, train_func, test_func)
            % nNode is the number of node in a subtree
            % cut_max is the maximum number of nodes which will be retrained           
@@ -129,6 +136,7 @@ classdef branch
            
         end
         
+        %%% Author: Zhaoming Zhang
         function parent = subtree_size(parent)
             if isempty(parent.par)
                 parent.nNode = 1;
@@ -139,6 +147,7 @@ classdef branch
             parent.nNode = parent.BL.nNode + parent.BR.nNode;
         end
         
+        %%% Author: Zhaoming Zhang
         function parent = uniform(parent, uniform_p)
             parent.cp = uniform_p;
             if isempty(parent.par)
@@ -148,6 +157,7 @@ classdef branch
             parent.BR = uniform(parent.BR, uniform_p);
         end
         
+        %%% Author: Zhaoming Zhang
         function parent = weighted_uniform(parent, uniform_p)
             if isempty(parent.par)
                 parent.cp = uniform_p;
@@ -160,6 +170,7 @@ classdef branch
                 + parent.BR.nNode * parent.BR.cp) / parent.nNode;
         end
         
+        %%% Author: Zhaoming Zhang
         function [parent, quality_sum] = quality(parent, quality_sum)
             if isempty(parent.par)
                 parent.cp = parent.entropy;
@@ -183,6 +194,7 @@ classdef branch
             parent.BR = normalize_cp(parent.BR, quality_sum);
         end
         
+        %%% Author: Ruobai Feng, Zhaoming Zhang
         function PQ_out = prediction(parent, data, Qx_in, PQ_out, test_func)
             if isempty(parent.par)
                 for i = 1:length(parent.PQ);
