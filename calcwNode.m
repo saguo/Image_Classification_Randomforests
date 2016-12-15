@@ -1,3 +1,4 @@
+%%%Author Takeshi Kondoh
 function wnNode = calcwNode(parent,depth0,wnNode)
    if isempty(parent.par)
        return;
