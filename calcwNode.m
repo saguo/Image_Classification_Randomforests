@@ -1,4 +1,6 @@
 %%%Author Takeshi Kondoh
+%%%This function calculate weighted number of node for node sampling
+%%%This function might be used for RTSTQ
 function wnNode = calcwNode(parent,depth0,wnNode)
    if isempty(parent.par)
        return;
