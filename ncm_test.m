@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng, Shuan Guo
 function [QLx, QRx] = ncm_test(data, Qx, par)
 
     test_data = data(Qx,1:(size(data,2)-1)); % test_data = [actual_data class]
