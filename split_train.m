@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng, Shuan Guo
 function [QLx_, QRx_, par_, entropyQL_, entropyQR_, PQL_, PQR_, split_found] = ...
     split_train(data, Qx, entropy, clmax)
 

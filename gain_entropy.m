@@ -1,3 +1,4 @@
+%%% Author; Wasit Limprasert (file exchange)
 function [Gain,PQL,PQR,entropyQL,entropyQR] = gain_entropy(entropy,QLx,QRx,data,clmax)
 
     % compute entropy the left node

@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng
 function direction = svm_test(datapoint, par)
 % 1 for left, 2 for right
 

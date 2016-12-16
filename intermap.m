@@ -1,3 +1,4 @@
+%%% Author: Wasit Limprasert (file exchange)
 %% clmap.m
 clear all
 close

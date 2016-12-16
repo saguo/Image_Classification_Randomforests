@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng
 function direction = split_test(theta, par)
 % 1 for left, 2 for right.
     direction = 0;
