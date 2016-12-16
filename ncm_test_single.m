@@ -1,3 +1,4 @@
+%%% Author: Ruobai Feng, Shuan Guo
 function direction = ncm_test_single(datapoint, par)
 % 1 for left, 2 for right
 
