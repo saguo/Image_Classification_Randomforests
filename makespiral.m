@@ -1,3 +1,4 @@
+%%% Author: Wasit Limprasert (file exchange)
 close all
 clear all
 
